@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa Paradiso Tofinho</title>
+<meta name="description" content="A little island of four thatched houses and a splash pool in Tofinho, Mozambique. Whole estate ZAR 4.0M.">
+<meta property="og:title" content="Casa Paradiso, Tofinho">
+<meta property="og:description" content="Four thatched houses, a splash pool and 1,800 m² in Tofinho, Mozambique. Whole estate ZAR 4.0M (about USD 243k).">
+<meta property="og:image" content="og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#BFE0F0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M4 17L16 6l12 11z%27 fill=%27%23C9A96E%27/%3E%3Crect x=%279%27 y=%2717%27 width=%2714%27 height=%279%27 fill=%27%23F4F1EA%27/%3E%3Crect x=%2714%27 y=%2720%27 width=%274%27 height=%276%27 fill=%27%238B5A2B%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700&family=Grandstander:wght@700;800&display=swap" rel="stylesheet">
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js" crossorigin>
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.core.min.js" crossorigin>
+<style>
+:root{
+  --sky-top:#A9D6EC; --sky-low:#FBE5CF;
+  --ink:#23395B; --ink-soft:#4E6380;
+  --paper:#FFFFFF; --edge:#BCD0DD;
+  --pink:#E8407A; --pink-edge:#B32A5C;
+  --wa:#25A866; --wa-edge:#1A7A4A;
+  --thatch:#C9A96E; --timber:#8B5A2B;
+  --night-top:#141B3D; --night-low:#3B3466;
+  --display:"Grandstander", "Trebuchet MS", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --gutter:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden}
+body{background:#A9D6EC;color:var(--ink);font:400 16px/1.45 var(--body);-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+
+/* ---------- sky (CSS so it paints before three.js arrives) ---------- */
+.sky,.sky i{position:fixed;inset:0;display:block}
+.sky{background:linear-gradient(180deg,var(--sky-top) 0%,#CFE6F2 55%,var(--sky-low) 100%)}
+.sky .dusk{background:linear-gradient(180deg,#8E8CC8 0%,#F2A27E 62%,#FFD49A 100%);opacity:0}
+.sky .night{background:linear-gradient(180deg,var(--night-top) 0%,#26285A 55%,var(--night-low) 100%);opacity:0}
+.sky .stars{opacity:0;background-image:
+  radial-gradient(1.6px 1.6px at 12% 14%,#fff 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 27% 31%,#fff 60%,transparent 61%),
+  radial-gradient(2px 2px at 41% 9%,#FFF3C4 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 58% 22%,#fff 60%,transparent 61%),
+  radial-gradient(1.6px 1.6px at 73% 12%,#fff 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 88% 28%,#fff 60%,transparent 61%),
+  radial-gradient(1.4px 1.4px at 8% 42%,#fff 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 35% 47%,#fff 60%,transparent 61%),
+  radial-gradient(2px 2px at 66% 38%,#FFF3C4 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 93% 46%,#fff 60%,transparent 61%),
+  radial-gradient(1.2px 1.2px at 19% 60%,#fff 60%,transparent 61%),
+  radial-gradient(1.4px 1.4px at 80% 62%,#fff 60%,transparent 61%);
+}
+.sky .moon{left:auto;right:18%;top:12%;width:46px;height:46px;inset:auto 18% auto auto;top:13%;border-radius:50%;background:#FFF6D8;box-shadow:0 0 30px 8px rgba(255,240,200,.35);opacity:0}
+
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+
+/* ---------- loader (pure CSS, paints first) ---------- */
+.loader{position:fixed;inset:0;display:grid;place-items:center;z-index:5;transition:opacity .5s ease,visibility .5s}
+.ready .loader{opacity:0;visibility:hidden}
+.loader .scene{position:relative;width:150px;height:130px}
+.loader .island{position:absolute;left:10px;right:10px;bottom:18px;height:22px;background:#9DBF78;border-radius:6px 6px 2px 2px;box-shadow:0 10px 0 #C98F6E,0 18px 0 #A86A55}
+.loader .hut{position:absolute;left:46px;bottom:40px;width:46px;height:30px;background:#fff;border-radius:3px}
+.loader .hut::before{content:"";position:absolute;left:-14px;top:-30px;border:37px solid transparent;border-top:0;border-bottom:32px solid var(--thatch);width:0}
+.loader .hut::after{content:"";position:absolute;left:17px;bottom:0;width:12px;height:16px;background:var(--timber);border-radius:6px 6px 0 0}
+.loader .ball{position:absolute;right:22px;bottom:40px;width:14px;height:14px;border-radius:50%;background:var(--pink);animation:hop .7s cubic-bezier(.3,.6,.4,1) infinite alternate}
+.loader p{margin:14px 0 0;text-align:center;font:700 17px/1.2 var(--display);color:var(--ink)}
+@keyframes hop{from{transform:translateY(0) scale(1.1,.9)}to{transform:translateY(-38px) scale(.95,1.05)}}
+
+/* ---------- top chrome ---------- */
+.top{position:fixed;left:0;right:0;top:0;z-index:20;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:calc(12px + env(safe-area-inset-top)) var(--gutter) 0;pointer-events:none}
+.brand{pointer-events:auto;background:var(--paper);border-radius:16px;padding:8px 14px 9px;box-shadow:0 4px 0 var(--edge),0 10px 24px rgba(35,57,91,.14)}
+.brand h1{margin:0;font:800 22px/1 var(--display);letter-spacing:-.01em}
+.brand p{margin:3px 0 0;font-size:13px;color:var(--ink-soft)}
+.toggles{display:flex;gap:10px;pointer-events:auto}
+.round{width:46px;height:46px;border-radius:50%;border:0;background:var(--paper);display:grid;place-items:center;box-shadow:0 4px 0 var(--edge),0 10px 22px rgba(35,57,91,.16);transition:transform .08s,box-shadow .08s}
+.round:active{transform:translateY(3px);box-shadow:0 1px 0 var(--edge)}
+.round svg{width:24px;height:24px}
+.round .moon-i,.night-on .round .sun-i{display:none}
+.night-on .round .moon-i{display:block}
+.round[aria-pressed="true"]{background:#FFE7F0}
+
+/* ---------- price bar (first number on the page) ---------- */
+.pricebar{position:fixed;left:var(--gutter);right:var(--gutter);bottom:calc(14px + env(safe-area-inset-bottom));z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--paper);border-radius:20px;padding:10px 10px 10px 16px;box-shadow:0 5px 0 var(--edge),0 14px 30px rgba(35,57,91,.18);max-width:520px;margin:0 auto}
+.pricebar .lbl{display:block;font-size:13px;color:var(--ink-soft);line-height:1.2}
+.pricebar .big{font:800 26px/1.05 var(--display)}
+.pricebar .usd{font-size:14px;color:var(--ink-soft);font-weight:600;margin-left:4px}
+.toy{border:0;border-radius:14px;padding:12px 16px;font-weight:700;font-size:15px;line-height:1.1;background:var(--pink);color:#fff;box-shadow:0 4px 0 var(--pink-edge);transition:transform .08s,box-shadow .08s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.toy:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pink-edge)}
+.toy.wa{background:var(--wa);box-shadow:0 4px 0 var(--wa-edge)}
+.toy.wa:active{box-shadow:0 1px 0 var(--wa-edge)}
+.toy svg{width:20px;height:20px;flex:none}
+
+/* ---------- hint ---------- */
+.hint{position:fixed;left:50%;bottom:calc(98px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:15;width:max-content;max-width:calc(100% - 2*var(--gutter));background:var(--ink);color:#fff;border-radius:16px;padding:9px 14px;font-size:14px;line-height:1.35;text-align:center;box-shadow:0 10px 24px rgba(35,57,91,.25);transition:opacity .4s,transform .4s;pointer-events:none}
+.hint::after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-7px;border:7px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+.hint.gone{opacity:0;transform:translate(-50%,8px)}
+.coarse .hint{left:auto;right:var(--gutter);transform:none;max-width:230px;text-align:left}
+.coarse .hint::after{left:auto;right:30px}
+.coarse .hint.gone{transform:translateY(8px)}
+
+/* ---------- 3D-anchored HTML labels ---------- */
+.tags{position:fixed;inset:0;z-index:10;pointer-events:none}
+.tag{position:absolute;left:0;top:0;pointer-events:auto;border:0;background:var(--paper);color:var(--ink);font:700 14px/1 var(--display);padding:7px 11px 8px;border-radius:12px;box-shadow:0 3px 0 var(--edge),0 6px 14px rgba(35,57,91,.18);white-space:nowrap;will-change:transform}
+.tag::after{content:"";position:absolute;left:50%;bottom:-6px;margin-left:-6px;border:6px solid transparent;border-bottom:0;border-top-color:var(--paper)}
+.tag.small{font-size:12px;padding:5px 9px 6px}
+.tag[hidden]{display:none}
+.tag.off{padding-right:16px}
+.tag.off::after{left:auto;right:-7px;top:50%;bottom:auto;margin:-7px 0 0;border:7px solid transparent;border-right:0;border-left-color:var(--paper)}
+.say{position:absolute;left:0;top:0;z-index:12;pointer-events:none;max-width:220px;background:var(--paper);color:var(--ink);border-radius:18px;padding:10px 14px;font:600 15px/1.3 var(--body);box-shadow:0 5px 0 var(--edge),0 12px 26px rgba(35,57,91,.22);opacity:0;transition:opacity .25s;will-change:transform}
+.say.on{opacity:1}
+.say::after{content:"";position:absolute;left:50%;bottom:-9px;margin-left:-9px;border:9px solid transparent;border-bottom:0;border-top-color:var(--paper)}
+.say b{display:block;font:700 13px/1.2 var(--display);color:var(--pink);margin-bottom:2px}
+
+/* ---------- stopwatch ---------- */
+.watch{position:fixed;left:50%;top:calc(84px + env(safe-area-inset-top));z-index:25;transform:translate(-50%,-14px) scale(.8);opacity:0;transition:opacity .25s,transform .25s;display:flex;align-items:center;gap:10px;background:var(--paper);border-radius:999px;padding:6px 16px 6px 6px;box-shadow:0 5px 0 var(--edge),0 12px 26px rgba(35,57,91,.22);pointer-events:none}
+.watch.on{opacity:1;transform:translate(-50%,0) scale(1)}
+.watch svg{width:44px;height:44px}
+.watch .hand{transform-origin:22px 25px}
+.watch output{font:800 26px/1 var(--display);font-variant-numeric:tabular-nums;min-width:62px}
+
+/* ---------- joystick (touch only) ---------- */
+.joy{position:fixed;left:var(--gutter);bottom:calc(96px + env(safe-area-inset-bottom));z-index:16;width:104px;height:104px;border-radius:50%;background:rgba(255,255,255,.42);box-shadow:inset 0 0 0 3px rgba(255,255,255,.75);display:none;touch-action:none}
+.coarse .joy{display:block}
+.joy i{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:var(--paper);box-shadow:0 4px 0 var(--edge),0 8px 16px rgba(35,57,91,.22)}
+.joy i::after{content:"";position:absolute;inset:14px;border-radius:50%;background:#E8D2A6}
+
+/* ---------- sheets ---------- */
+.veil{position:fixed;inset:0;z-index:40;background:rgba(20,30,55,.18);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.veil.on{opacity:1;visibility:visible}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;max-height:80vh;max-height:80dvh;overflow:auto;overscroll-behavior:contain;background:var(--paper);border-radius:26px 26px 0 0;padding:10px var(--gutter) calc(22px + env(safe-area-inset-bottom));box-shadow:0 -10px 40px rgba(35,57,91,.25);transform:translateY(105%);transition:transform .42s cubic-bezier(.2,.9,.25,1.08);visibility:hidden}
+.sheet.on{transform:none;visibility:visible}
+.grip{width:44px;height:5px;border-radius:3px;background:#D7E2EA;margin:0 auto 10px}
+.x{position:absolute;right:12px;top:12px;width:40px;height:40px;border-radius:50%;border:0;background:#EEF4F8;display:grid;place-items:center}
+.x svg{width:18px;height:18px}
+.sheet h2{margin:2px 52px 6px 0;font:800 28px/1.08 var(--display);letter-spacing:-.01em}
+.sheet .line{margin:0 0 10px;font-weight:600;font-size:16px}
+.sheet .more{margin:0 0 12px;color:var(--ink-soft);font-size:15px;max-width:60ch}
+.sheet .note{margin:4px 0 12px;font-size:14px;color:var(--pink-edge);font-weight:600}
+.cost{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 12px}
+.cost strong{font:800 30px/1 var(--display)}
+.cost span{font-weight:600;color:var(--ink-soft)}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 calc(-1*var(--gutter)) 14px;padding:2px var(--gutter) 6px;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.strip figure{margin:0;flex:0 0 82%;scroll-snap-align:center}
+.strip button{display:block;width:100%;padding:0;border:0;background:#E9EFF3;border-radius:16px;overflow:hidden;aspect-ratio:4/3}
+.strip img{display:block;width:100%;height:100%;object-fit:cover}
+.strip figcaption{font-size:13px;color:var(--ink-soft);margin-top:6px;line-height:1.3}
+.actions{display:flex;flex-direction:column;gap:12px;align-items:stretch}
+.actions .toy{padding:15px 18px;font-size:16px}
+.linkish{border:0;background:none;padding:6px;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.bundle{margin:0 0 14px;padding:10px 12px;border-radius:14px;background:#EEF6FB;font-size:14px}
+
+/* price card */
+.prices h2{margin-bottom:10px}
+.estate{background:#FFF0F5;border-radius:18px;padding:14px 14px 12px;margin:0 0 12px;box-shadow:inset 0 0 0 2px #F7C6D8}
+.estate .what{font-weight:700;font-size:15px}
+.estate .amt{font:800 36px/1.05 var(--display);margin:4px 0 2px}
+.estate .amt span{font:600 16px var(--body);color:var(--ink-soft);margin-left:6px}
+.estate .save{font-size:14px;color:var(--pink-edge);font-weight:600}
+.units{list-style:none;margin:0 0 12px;padding:0}
+.units li{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 2px;border-bottom:2px dotted #DCE6EC}
+.units li:last-child{border-bottom:0}
+.units .n{font-weight:600}
+.units .p{font:800 19px/1 var(--display);text-align:right}
+.units .p span{display:block;font:600 12px/1.4 var(--body);color:var(--ink-soft)}
+.units button{border:0;background:none;padding:0;font-weight:600;text-decoration:underline;text-decoration-color:#C9D7E1;text-underline-offset:3px}
+.plot{font-size:14px;color:var(--ink-soft);margin:0 0 14px}
+.rate{font-size:12px;color:var(--ink-soft);margin:10px 0 0;text-align:center}
+
+/* lightbox */
+.lightbox{position:fixed;inset:0;z-index:70;background:rgba(14,20,38,.92);display:none;place-items:center;padding:16px}
+.lightbox.on{display:grid}
+.lightbox img{max-width:100%;max-height:82vh;border-radius:12px}
+.lightbox p{color:#fff;text-align:center;margin:10px 0 0;font-size:14px}
+.lightbox .x{position:fixed;background:#fff}
+
+/* fallback (no WebGL) */
+.fallback{position:fixed;left:var(--gutter);right:var(--gutter);top:50%;transform:translateY(-60%);z-index:30;max-width:460px;margin:0 auto;background:var(--paper);border-radius:22px;padding:18px;box-shadow:0 5px 0 var(--edge),0 14px 30px rgba(35,57,91,.18);display:none}
+.no3d .fallback{display:block}
+.no3d .loader,.no3d .hint,.no3d .joy{display:none}
+.fallback h2{margin:0 0 6px;font:800 22px/1.15 var(--display)}
+.fallback p{margin:0 0 12px;color:var(--ink-soft);font-size:15px}
+.fallback .row{display:flex;flex-wrap:wrap;gap:8px}
+.fallback .row .toy{flex:1 1 40%;background:#fff;color:var(--ink);box-shadow:0 4px 0 var(--edge),inset 0 0 0 2px var(--edge)}
+
+.og .hint,.og .toggles,.og .joy,.og .tags .small{display:none!important}
+.fps{position:fixed;right:8px;top:70px;z-index:90;background:rgba(0,0,0,.6);color:#fff;font:12px/1 monospace;padding:4px 6px;border-radius:6px;display:none}
+
+/* desktop */
+@media (min-width:760px){
+  .brand{padding:10px 18px 12px}
+  .brand h1{font-size:28px}
+  .pricebar{left:24px;right:auto;bottom:24px;margin:0;width:400px}
+  .sheet{left:auto;right:20px;top:20px;bottom:20px;width:420px;max-height:none;border-radius:26px;transform:translateX(110%);padding:16px 22px 22px}
+  .sheet .grip{display:none}
+  .strip{margin:0 -22px 14px;padding:2px 22px 6px}
+  .top{padding:20px 24px 0}
+  .hint{bottom:34px;left:calc(50% + 220px);max-width:calc(100% - 480px)}
+  .hint::after{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .loader .ball{animation:none}
+  .loader,.tags{transition:none!important}
+  .sheet{transition:none}
+}
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><i class="dusk"></i><i class="night"></i><i class="stars"></i><i class="moon"></i></div>
+<canvas id="scene" tabindex="0" aria-label="Little 3D model of Casa Paradiso. Tap the ground to move Tofu the dog, tap a house to see photos."></canvas>
+
+<div class="loader" role="status">
+  <div>
+    <div class="scene"><div class="island"></div><div class="hut"></div><div class="ball"></div></div>
+    <p>Building the little island</p>
+  </div>
+</div>
+
+<header class="top">
+  <div class="brand">
+    <h1>Casa Paradiso</h1>
+    <p>Tofinho, Mozambique</p>
+  </div>
+  <div class="toggles">
+    <button class="round" id="sound" aria-pressed="false" aria-label="Sea sound">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#23395B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h4l5 4V6L7 10H3z" fill="#E8D2A6"/><path class="w1" d="M16 9.5c1 1.4 1 3.6 0 5"/><path class="w2" d="M18.8 7c2 2.8 2 7.2 0 10"/></svg>
+    </button>
+    <button class="round" id="daynight" aria-pressed="false" aria-label="Switch to night">
+      <svg class="sun-i" viewBox="0 0 24 24" fill="none" stroke="#E08A1E" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5" fill="#FFC94A"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+      <svg class="moon-i" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="#6E74C9"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="tags" id="tags"></div>
+
+<div class="watch" id="watch" aria-live="polite">
+  <svg viewBox="0 0 44 48"><rect x="18" y="0" width="8" height="5" rx="2" fill="#E8407A"/><circle cx="22" cy="25" r="18" fill="#FFF0F5" stroke="#23395B" stroke-width="3"/><path class="sweep" d="" fill="#F7C6D8"/><line class="hand" x1="22" y1="25" x2="22" y2="11" stroke="#E8407A" stroke-width="3" stroke-linecap="round"/><circle cx="22" cy="25" r="2.5" fill="#23395B"/></svg>
+  <output id="watchTime">0:00</output>
+</div>
+
+<p class="hint" id="hint">This is Tofu. Tap the ground and he runs there. Tap a house to look inside.</p>
+
+<div class="joy" id="joy" aria-hidden="true"><i></i></div>
+
+<button class="pricebar" id="pricebar" type="button" aria-haspopup="dialog" style="border:0;text-align:left;font:inherit;color:inherit">
+  <span>
+    <span class="lbl">Whole estate, all four houses</span>
+    <span class="big">ZAR 4.0M</span><span class="usd">USD 243k</span>
+  </span>
+  <span class="toy" aria-hidden="true">All prices</span>
+</button>
+
+<div class="fallback" id="fallback">
+  <h2>The little 3D island can't open here</h2>
+  <p>This browser has 3D graphics (WebGL) switched off, so here are the houses as photos instead.</p>
+  <div class="row">
+    <button class="toy" data-open="big">Big house</button>
+    <button class="toy" data-open="top">Cottage Top</button>
+    <button class="toy" data-open="middle">Cottage Middle</button>
+    <button class="toy" data-open="down">Cottage Down</button>
+    <button class="toy" data-open="pool">Splash pool</button>
+    <button class="toy" data-open="beach">Beach walk</button>
+  </div>
+</div>
+
+<div class="veil" id="veil"></div>
+
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="grip"></div>
+  <button class="x" data-close aria-label="Close"><svg viewBox="0 0 20 20" stroke="#23395B" stroke-width="2.6" stroke-linecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+  <div id="sheetBody"></div>
+</section>
+
+<section class="sheet prices" id="prices" role="dialog" aria-modal="true" aria-labelledby="pricesTitle">
+  <div class="grip"></div>
+  <button class="x" data-close aria-label="Close"><svg viewBox="0 0 20 20" stroke="#23395B" stroke-width="2.6" stroke-linecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+  <h2 id="pricesTitle">Prices</h2>
+  <div class="estate">
+    <div class="what">Whole estate (all four houses, pool, 1,800 m²)</div>
+    <div class="amt">ZAR 4.0M<span>USD 243k</span></div>
+    <div class="save">ZAR 4.45M separately, save ZAR 445k</div>
+  </div>
+  <ul class="units">
+    <li><button class="n" data-open="big">Big house</button><span class="p">ZAR 2.2M<span>USD 134k</span></span></li>
+    <li><button class="n" data-open="top">Cottage Top</button><span class="p">ZAR 800k<span>USD 49k</span></span></li>
+    <li><button class="n" data-open="middle">Cottage Middle</button><span class="p">ZAR 750k<span>USD 46k</span></span></li>
+    <li><button class="n" data-open="down">Cottage Down</button><span class="p">ZAR 700k<span>USD 43k</span></span></li>
+  </ul>
+  <p class="plot">Rua de Sangomas, Tofinho, Inhambane. Elevated, sloping plot, fully fenced. Borehole water, Starlink internet, prepaid electricity. Reachable by an ordinary 2WD car. Pets allowed.</p>
+  <div class="actions">
+    <a class="toy wa" id="waEstate" target="_blank" rel="noopener" href="https://wa.me/27849781078?text=Hi%20Pierre%2C%20I'm%20looking%20at%20Casa%20Paradiso.%20I'd%20like%20to%20know%20more%20about%20the%20whole%20estate."><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.5a9.3 9.3 0 0 0-8 14l-1.3 4.8 4.9-1.3A9.3 9.3 0 1 0 12 2.5zm0 1.9a7.4 7.4 0 1 1-3.8 13.8l-.3-.2-2.8.8.8-2.7-.2-.3A7.4 7.4 0 0 1 12 4.4zm-3 3.4c-.2 0-.5 0-.7.3-.3.3-1 1-1 2.3s1 2.7 1.2 2.9c.1.2 2 3.1 4.9 4.3 2.4.9 2.9.8 3.4.7.5 0 1.7-.7 1.9-1.4.2-.7.2-1.3.2-1.4l-.5-.3-1.9-.9c-.3-.1-.5-.1-.6.1l-.9 1.1c-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6l.4-.5.3-.5v-.5l-.9-2.1c-.2-.5-.4-.5-.6-.5H9z"/></svg>Chat with Pierre on WhatsApp</a>
+  </div>
+  <p class="rate">USD at 1 USD = 16.47 ZAR</p>
+</section>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photo">
+  <button class="x" data-close aria-label="Close photo"><svg viewBox="0 0 20 20" stroke="#23395B" stroke-width="2.6" stroke-linecap="round"><path d="M4 4l12 12M16 4L4 16"/></svg></button>
+  <figure style="margin:0"><img alt=""><p></p></figure>
+</div>
+
+<div class="fps" id="fps"></div>
+
+<script>
+  // Runs before any module: decide touch vs mouse, and detect WebGL so the fallback paints at once.
+  (function () {
+    var d = document.documentElement;
+    if (matchMedia('(pointer: coarse)').matches || /[?&]touch/.test(location.search)) d.classList.add('coarse');
+    var ok = false;
+    try { var c = document.createElement('canvas'); ok = !!(window.WebGLRenderingContext && (c.getContext('webgl2') || c.getContext('webgl'))); } catch (e) {}
+    if (!ok) d.classList.add('no3d');
+    window.CP_NO3D = !ok;
+  })();
+</script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.min.js" } }
+</script>
+<script type="module" src="ui.js"></script>
+<script type="module" src="scene.js" onerror="document.documentElement.classList.add('no3d')"></script>
+</body>
+</html>

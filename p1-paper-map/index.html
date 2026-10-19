@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa Paradiso Tofinho</title>
+<meta name="description" content="Four thatched houses and a splash pool on 1,800 m² in Tofinho, Mozambique. 5 minutes' walk to Tofinho beach. Whole estate ZAR 4.0M.">
+<meta property="og:title" content="Casa Paradiso, Tofinho">
+<meta property="og:description" content="Four thatched houses and a splash pool on 1,800 m², 5 minutes from Tofinho beach. Whole estate ZAR 4.0M (about USD 243k).">
+<meta property="og:image" content="og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F2E6CC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2E6CC; --paper-2:#EADBB8; --card:#FBF4E2;
+  --ink:#3B2A1F; --ink-soft:#6B5440;
+  --thatch:#C9A96E; --timber:#8B5A2B; --oxide:#8E4A3A;
+  --pink:#E8407A; --pool:#2FA7C9; --dune:#6E8F4E; --sea:#9FC5D6;
+  --wa:#1E9E55;
+  --hand:"Caveat", "Segoe Print", cursive;
+  --sans:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  --wobble:255px 18px 225px 16px / 16px 225px 18px 255px;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .42 0 0 0 0 .32 0 0 0 0 .2 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --blot:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='700'%3E%3Cfilter id='b'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.008' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .42 0 0 0 0 .22 0 0 0 1.1 -.42'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23b)'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+html.night{ --paper:#25345A; --paper-2:#1E2B4C; --card:#FBF4E2; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{
+  background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:16px; line-height:1.45;
+  overflow:hidden; transition:background-color 1.2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px dashed var(--pink);outline-offset:3px}
+
+/* ---------- layout ---------- */
+#app{position:fixed;inset:0;}
+#stage{position:absolute;inset:0;overflow:hidden;touch-action:manipulation}
+#stage::after{ /* paper grain and watercolour blotches over the painting */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:var(--grain),var(--blot),radial-gradient(ellipse at 50% 45%,transparent 55%,rgba(110,80,40,.22) 100%);
+  mix-blend-mode:multiply;opacity:.55;
+}
+#paint,#scene{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none;-webkit-user-select:none}
+#paint{pointer-events:none}
+#stage{background:#E9E3C2}
+
+/* ---------- header cartouche ---------- */
+.cartouche{
+  position:absolute;z-index:5;left:16px;right:16px;top:max(10px,env(safe-area-inset-top));
+  display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:2px 12px;pointer-events:none;
+}
+.cartouche > *{pointer-events:auto}
+.brand h1{font-family:var(--hand);font-weight:700;font-size:42px;line-height:.9;margin:0;letter-spacing:.5px;
+  text-shadow:0 0 6px var(--paper),0 0 12px var(--paper)}
+.brand p{margin:2px 0 0;font-size:15px;color:var(--ink-soft);text-shadow:0 0 6px var(--paper),0 0 10px var(--paper)}
+html.night .brand h1, html.night .brand p{color:#F5EBD3;text-shadow:0 0 8px #25345A,0 0 14px #25345A}
+.tag{
+  flex:none;display:inline-flex;flex-direction:column;align-items:flex-start;gap:0;
+  background:var(--card) var(--grain);border:2px solid var(--ink);border-radius:var(--wobble);
+  padding:6px 14px 6px 12px;transform:rotate(-2deg);box-shadow:3px 4px 0 rgba(59,42,31,.18);cursor:pointer;text-align:left;
+}
+.tag small{font-size:13px;color:var(--ink-soft);line-height:1.1}
+.tag b{font-size:21px;line-height:1.1;font-weight:700}
+.tag span{font-size:13px;color:var(--ink-soft);line-height:1.15}
+
+/* ---------- dock ---------- */
+.dock{
+  position:absolute;z-index:6;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));
+  display:flex;justify-content:center;gap:10px;padding:0 16px;pointer-events:none;
+}
+.dock button,.dock a{
+  pointer-events:auto;text-decoration:none;color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:7px;
+  background:var(--card) var(--grain);border:2px solid var(--ink);border-radius:var(--wobble);
+  min-height:48px;padding:6px 14px;font-family:var(--hand);font-size:22px;font-weight:700;line-height:1;
+  box-shadow:2px 3px 0 rgba(59,42,31,.22);
+}
+.dock button:active{transform:translate(1px,2px);box-shadow:1px 1px 0 rgba(59,42,31,.22)}
+.dock .round{width:50px;padding:0;justify-content:center}
+.dock .wa-round{background:var(--wa)}
+.dock svg{width:28px;height:28px;flex:none}
+.dock .lbl-short{display:none}
+@media (max-width:430px){ .dock .lbl-long{display:none} .dock .lbl-short{display:inline} }
+
+
+/* ---------- sheet ---------- */
+#scrim{position:fixed;inset:0;z-index:20;background:rgba(40,28,18,.28);opacity:0;pointer-events:none;transition:opacity .35s}
+#scrim.on{opacity:1;pointer-events:auto}
+#sheet{
+  position:fixed;z-index:21;left:0;right:0;bottom:0;margin:0 auto;max-width:560px;max-height:86dvh;overflow-y:auto;overflow-x:hidden;
+  background:var(--card) var(--grain);border:2px solid var(--ink);border-bottom:0;
+  border-radius:26px 30px 0 0 / 22px 26px 0 0;
+  padding:8px 16px calc(18px + env(safe-area-inset-bottom));
+  transform:translateY(105%);transition:transform .45s cubic-bezier(.2,.9,.25,1.12);
+  box-shadow:0 -6px 0 rgba(59,42,31,.12);overscroll-behavior:contain;
+}
+#sheet.on{transform:translateY(0)}
+#sheet.dragging{transition:none}
+.grab{display:block;width:100%;height:26px;border:0;background:none;cursor:grab;touch-action:none;padding:0}
+.grab::before{content:"";display:block;margin:6px auto 0;width:54px;height:6px;border-radius:6px;background:var(--ink);opacity:.35}
+.x{position:absolute;right:10px;top:8px;width:44px;height:44px;border:0;background:none;font-family:var(--hand);font-size:34px;line-height:1;cursor:pointer}
+.sheet-title{font-family:var(--hand);font-weight:700;font-size:38px;line-height:1;margin:0 48px 4px 0}
+.facts{margin:0 0 10px;font-size:16px}
+.note{margin:0 0 10px;color:var(--ink-soft);font-size:15px}
+.price{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:4px 0 12px}
+.price b{font-size:28px;line-height:1}
+.price span{color:var(--ink-soft)}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:4px -16px 12px;padding:4px 16px 8px;scrollbar-width:none;overscroll-behavior-x:contain}
+.strip::-webkit-scrollbar{display:none}
+.strip figure{margin:0;flex:0 0 auto;width:min(72vw,260px);scroll-snap-align:start}
+.strip button{display:block;padding:0;border:2px solid var(--ink);border-radius:14px 18px 12px 16px;overflow:hidden;background:var(--paper-2);cursor:zoom-in;width:100%}
+.strip img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover}
+.strip figcaption{font-size:13px;color:var(--ink-soft);line-height:1.25;margin-top:4px}
+.strip.one figure{width:100%}
+.wa{
+  display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;text-decoration:none;
+  background:var(--wa);color:#fff;border:2px solid var(--ink);border-radius:var(--wobble);
+  font-weight:700;font-size:18px;box-shadow:2px 3px 0 rgba(59,42,31,.25);
+}
+.wa svg{width:24px;height:24px}
+.link{display:block;width:100%;margin:12px 0 0;padding:8px 4px;background:none;border:0;color:var(--ink-soft);font-size:15px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.rowlink{background:none;border:0;padding:0;font-size:17px;font-weight:700;text-decoration:underline dashed;text-underline-offset:4px;cursor:pointer;text-align:left}
+.ptable td b{font-size:18px}
+.ptable{width:100%;border-collapse:collapse;margin:6px 0 14px}
+.ptable td{padding:8px 0;border-bottom:1.5px dashed rgba(59,42,31,.3);vertical-align:baseline}
+.ptable td:last-child{text-align:right;white-space:nowrap}
+.ptable small{display:block;color:var(--ink-soft);font-size:13px}
+.estate{background:#fff8e6;border:2px solid var(--ink);border-radius:var(--wobble);padding:10px 14px;margin:6px 0 10px;transform:rotate(-.6deg)}
+.estate .lead{font-family:var(--hand);font-size:24px;font-weight:700;line-height:1}
+.estate b{font-size:32px;line-height:1.1;display:block}
+.estate span{display:block;color:var(--ink-soft);font-size:14px}
+
+/* ---------- bubble, stopwatch, lightbox ---------- */
+.bubble{
+  position:fixed;z-index:15;max-width:230px;padding:8px 12px;background:#fffaf0;border:2px solid var(--ink);
+  border-radius:var(--wobble);font-family:var(--hand);font-size:22px;font-weight:700;line-height:1.05;
+  pointer-events:none;opacity:0;transform-origin:50% 100%;box-shadow:2px 3px 0 rgba(59,42,31,.2);
+}
+.bubble::after{content:"";position:absolute;left:var(--tail,50%);bottom:-11px;width:16px;height:16px;background:#fffaf0;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateX(-50%) rotate(45deg) skew(8deg,8deg)}
+.bubble.below::after{bottom:auto;top:-11px;transform:translateX(-50%) rotate(225deg)}
+#watch{position:fixed;z-index:16;left:12px;bottom:calc(84px + env(safe-area-inset-bottom));width:150px;text-align:center;pointer-events:none;opacity:0}
+#watch svg{width:110px;height:120px;display:block;margin:0 auto}
+#watch div{font-family:var(--hand);font-weight:700;font-size:40px;line-height:1;margin-top:-4px;color:var(--ink);text-shadow:0 0 6px #fff8e6,0 0 12px #fff8e6}
+#lightbox{position:fixed;inset:0;z-index:30;background:rgba(30,22,14,.9);display:none;align-items:center;justify-content:center;flex-direction:column;padding:16px;cursor:zoom-out}
+#lightbox.on{display:flex}
+#lightbox img{max-width:100%;max-height:80dvh;border:3px solid var(--card);border-radius:10px;background:#222}
+#lightbox p{color:#F5EBD3;font-size:15px;text-align:center;max-width:560px;margin:10px 0 0}
+
+/* ---------- svg classes ---------- */
+#scene .ink{fill:none;stroke:var(--ink);stroke-linecap:round;stroke-linejoin:round}
+#scene .hit{cursor:pointer;outline:none}
+#scene .hit:focus-visible .focusring{opacity:1}
+#scene .focusring{opacity:0;fill:none;stroke:var(--pink);stroke-width:2.5;stroke-dasharray:5 4}
+#scene .lbl{font-family:var(--hand);font-weight:700;fill:var(--ink);paint-order:stroke;stroke:#F6ECD4;stroke-width:4px;stroke-linejoin:round;transition:fill 1.2s, stroke 1.2s}
+#scene .lbl.sm{font-weight:500}
+html.night #scene .lbl{fill:#FBF1D8;stroke:#25345A}
+
+/* ---------- desktop: same full-screen scene, roomier HUD ---------- */
+@media (max-width:430px){
+  .brand h1{font-size:36px}
+  .brand p{font-size:14px}
+  .tag{padding:4px 10px 5px 10px}
+  .tag b{font-size:18px}
+  .tag small,.tag span{font-size:12px}
+}
+@media (min-width:700px) and (orientation:landscape){
+  .dock{justify-content:flex-end;padding:0 20px}
+}
+@media (min-width:900px){
+  .brand h1{font-size:56px}
+  .brand p{font-size:17px}
+  .tag b{font-size:25px}
+  .dock{gap:12px}
+  .bubble{font-size:24px}
+}
+.og .dock,.og #hint{display:none}
+@media (prefers-reduced-motion:reduce){
+  #sheet{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <main id="stage" aria-label="Illustrated map of Casa Paradiso">
+    <svg id="paint" viewBox="0 0 600 780" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+    <svg id="scene" viewBox="0 0 600 780" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Hand-drawn map: three cottages on the left stepping up the slope, splash pool in the middle, big house on the right, path to Tofinho beach and the Indian Ocean at the top right."></svg>
+  </main>
+
+  <header class="cartouche">
+    <div class="brand"><h1>Casa Paradiso</h1><p>Tofinho, Mozambique</p></div>
+    <button class="tag" id="tagBtn" aria-label="See all prices"><small>Whole estate</small><b>ZAR 4.0M</b><span>about USD 243k</span></button>
+  </header>
+
+  <nav class="dock" aria-label="Map controls">
+    <button class="round" id="dayBtn" aria-label="Switch to evening" aria-pressed="false">
+      <svg viewBox="0 0 28 28" id="dayIcon"><g id="sunI"><circle cx="14" cy="14" r="6" fill="#F3C64B" stroke="#3B2A1F" stroke-width="1.8"/><path d="M14 2v4M14 22v4M2 14h4M22 14h4M5.5 5.5l2.8 2.8M19.7 19.7l2.8 2.8M5.5 22.5l2.8-2.8M19.7 8.3l2.8-2.8" stroke="#3B2A1F" stroke-width="1.8" stroke-linecap="round"/></g><g id="moonI" style="display:none"><path d="M10 4a10 10 0 1 0 14 13A8 8 0 0 1 10 4z" fill="#F3D27A" stroke="#3B2A1F" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 6l1 1M4 7l2-2" stroke="#3B2A1F" stroke-width="1.4" stroke-linecap="round"/></g></svg>
+    </button>
+    <button id="beachBtn"><svg viewBox="0 0 28 28"><circle cx="14" cy="16" r="9" fill="#FFF8E6" stroke="#3B2A1F" stroke-width="1.8"/><path d="M14 16V10.5M14 16l4 2" stroke="#3B2A1F" stroke-width="1.8" stroke-linecap="round"/><path d="M11 4h6M14 4v3" stroke="#3B2A1F" stroke-width="1.8" stroke-linecap="round"/></svg><span class="lbl-long">Walk to the beach</span><span class="lbl-short">Beach walk</span></button>
+    <a class="round wa-round" id="waBtn" href="https://wa.me/27849781078" target="_blank" rel="noopener" aria-label="Chat with Pierre on WhatsApp"><svg viewBox="0 0 28 28"><path d="M14 3.5a10.3 10.3 0 0 0-8.9 15.5L3.6 24.4l5.6-1.5A10.3 10.3 0 1 0 14 3.5z" fill="#fff" stroke="#3B2A1F" stroke-width="1.8" stroke-linejoin="round"/><path d="M10.2 9.2c.4-.4 1-.4 1.3.1l1 1.6c.2.4.1.8-.2 1.1l-.6.6c.6 1.3 1.6 2.3 2.9 2.9l.6-.6c.3-.3.8-.4 1.1-.2l1.6 1c.5.3.5.9.1 1.3l-.8.8c-.6.6-1.6.7-2.4.3a10 10 0 0 1-4.7-4.7c-.4-.8-.3-1.8.3-2.4z" fill="#1E9E55"/></svg></a>
+    <button class="round" id="soundBtn" aria-label="Turn on wave sounds" aria-pressed="false"><svg viewBox="0 0 28 28"><path d="M3 11h5l6-5v16l-6-5H3z" fill="#9FC5D6" stroke="#3B2A1F" stroke-width="1.8" stroke-linejoin="round"/><g id="waves" style="display:none"><path d="M18 10q3 4 0 8M21 7q5 7 0 14" fill="none" stroke="#3B2A1F" stroke-width="1.8" stroke-linecap="round"/></g><g id="mute"><path d="M18 11l6 6M24 11l-6 6" stroke="#3B2A1F" stroke-width="1.8" stroke-linecap="round"/></g></svg></button>
+  </nav>
+</div>
+
+<div id="scrim"></div>
+<section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
+  <button class="grab" aria-label="Drag down to close"></button>
+  <button class="x" aria-label="Close">&times;</button>
+  <div id="sheetBody"></div>
+</section>
+<div class="bubble" id="bubble" role="status" aria-live="polite"></div>
+<div id="watch" aria-hidden="true">
+  <svg viewBox="0 0 110 120"><path d="M47 6h16M55 6v10" stroke="#3B2A1F" stroke-width="4" stroke-linecap="round"/><path d="M84 26l7-7" stroke="#3B2A1F" stroke-width="4" stroke-linecap="round"/><circle cx="55" cy="66" r="46" fill="#FFF8E6" stroke="#3B2A1F" stroke-width="3.5"/><path id="watchArc" d="" fill="#9FC5D6" opacity=".8"/><g stroke="#3B2A1F" stroke-width="2.5" stroke-linecap="round"><path d="M55 25v6M55 101v6M14 66h6M90 66h6"/></g><line id="watchHand" x1="55" y1="66" x2="55" y2="30" stroke="#E8407A" stroke-width="4" stroke-linecap="round"/><circle cx="55" cy="66" r="4.5" fill="#3B2A1F"/></svg>
+  <div id="watchTime">0:00</div>
+</div>
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Photo"><img alt=""><p></p></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js" defer></script>
+<script src="scene.js" defer></script>
+<script src="app.js" defer></script>
+</body>
+</html>

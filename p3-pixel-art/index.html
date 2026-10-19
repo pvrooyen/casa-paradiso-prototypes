@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Casa Paradiso Tofinho</title>
+<meta name="description" content="Four thatched houses and a splash pool on 1,800 m² in Tofinho, Mozambique. Whole estate ZAR 4.0M (about USD 243k).">
+<meta property="og:title" content="Casa Paradiso, Tofinho">
+<meta property="og:description" content="Four thatched houses and a splash pool on 1,800 m², a 5-minute walk to Tofinho beach. Whole estate ZAR 4.0M (about USD 243k).">
+<meta property="og:image" content="og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#A9D3EC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Pixelify+Sans:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet"></noscript>
+<link rel="modulepreload" href="js/pixel.js"><link rel="modulepreload" href="js/world.js"><link rel="modulepreload" href="js/sprites.js">
+<style>
+:root{
+  --ink:#2B1D1A; --timber:#8B5A2B; --timber-dk:#5E3A1C; --thatch:#C9A96E; --thatch-lt:#E8D29C;
+  --parch:#F7EBCB; --wall:#F4F1EA; --oxide:#8E4A3A; --pink:#E8407A; --pool:#2FA7C9;
+  --dune:#6E8F4E; --dune-dk:#3F5E33; --sky:#A9D3EC; --wa:#3D7A34; --wa-dk:#2A5A24;
+  --px:3px;
+  --f-pixel:"Press Start 2P", ui-monospace, monospace;
+  --f-talk:"Pixelify Sans", "Atkinson Hyperlegible", system-ui, sans-serif;
+  --f-read:"Atkinson Hyperlegible", system-ui, sans-serif;
+}
+*{box-sizing:border-box;font-variant-ligatures:none}
+html,body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none}
+body{background:#6E8F4E;color:var(--ink);font-family:var(--f-read);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+
+#stage{position:fixed;inset:0;overflow:hidden;background:#9DB86A}
+#scene{position:absolute;left:0;top:0;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:manipulation;cursor:pointer}
+
+/* Pixel frame: parchment, timber band, ink notched corners */
+.pixbox{background:var(--parch);
+  box-shadow:inset 0 0 0 var(--px) var(--timber),inset 0 0 0 calc(var(--px)*2) var(--thatch-lt),
+  0 calc(var(--px)*-1) 0 0 var(--ink),0 var(--px) 0 0 var(--ink),calc(var(--px)*-1) 0 0 0 var(--ink),var(--px) 0 0 0 var(--ink),
+  0 calc(var(--px)*2) 0 0 rgba(43,29,26,.35)}
+
+/* HUD */
+.hud{position:absolute;left:0;right:0;top:0;padding:max(16px,env(safe-area-inset-top)) 16px 0;pointer-events:none;display:flex;flex-direction:column;align-items:center;text-align:center}
+.title{font-family:var(--f-pixel);font-weight:400;font-size:21px;line-height:1.25;margin:0;color:var(--wall);letter-spacing:.5px;
+  text-shadow:2px 0 var(--ink),-2px 0 var(--ink),0 2px var(--ink),0 -2px var(--ink),2px 2px var(--ink),-2px 2px var(--ink),2px -2px var(--ink),-2px -2px var(--ink),0 5px var(--timber-dk),2px 5px var(--timber-dk),-2px 5px var(--timber-dk)}
+.place{font-family:var(--f-talk);font-weight:600;font-size:15px;margin:12px 0 0;color:var(--ink);background:rgba(247,235,203,.85);padding:2px 8px}
+.chip{pointer-events:auto;margin-top:16px;border:0;padding:13px 18px 12px;display:grid;grid-template-columns:auto auto;column-gap:12px;align-items:baseline;text-align:left}
+.chip .k{grid-column:1/3;font-family:var(--f-pixel);font-size:9px;color:var(--timber-dk);margin-bottom:7px}
+.chip .v{font-family:var(--f-read);font-weight:700;font-size:26px;line-height:1}
+.chip .u{font-family:var(--f-read);font-size:15px;color:#4a3a30}
+.chip .more{grid-column:1/3;margin-top:7px;font-family:var(--f-read);font-size:14px;color:var(--oxide);text-decoration:underline;text-underline-offset:3px}
+
+/* Tags over buildings */
+#tags{position:absolute;inset:0;pointer-events:none}
+.tag{position:absolute;left:0;top:0;pointer-events:auto;border:0;background:var(--ink);color:var(--wall);
+  font-family:var(--f-pixel);font-size:8px;line-height:1;padding:5px 6px 4px;white-space:nowrap;
+  box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.tag:hover{background:var(--oxide)}
+.tag.ghost{background:transparent;box-shadow:none;width:32px;height:36px;padding:0;color:transparent;overflow:hidden}
+
+/* Bottom bar */
+.bar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:10px;justify-content:center;padding:0 16px max(14px,env(safe-area-inset-bottom))}
+.pbtn{border:0;min-height:44px;padding:0 12px;display:inline-flex;align-items:center;gap:7px;font-family:var(--f-pixel);font-size:9px}
+.pbtn canvas{width:24px;height:24px;image-rendering:pixelated}
+.pbtn[aria-pressed="true"]{background:#FFE7A3}
+.hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(max(14px,env(safe-area-inset-bottom)) + 60px);margin:0;
+  font-family:var(--f-talk);font-weight:600;font-size:16px;background:var(--ink);color:var(--wall);padding:6px 12px;white-space:nowrap;transition:opacity .4s}
+.hint.gone{opacity:0;pointer-events:none}
+
+/* Stopwatch */
+.watch{position:absolute;left:50%;top:max(16px,env(safe-area-inset-top));transform:translateX(-50%);padding:12px 16px 10px;display:flex;gap:10px;align-items:center;z-index:5;white-space:nowrap}
+.watch[hidden]{display:none}
+body.running .title,body.running .place{visibility:hidden}
+.watch b{font-family:var(--f-pixel);font-size:20px;font-weight:400}
+.watch span{font-family:var(--f-talk);font-size:15px;font-weight:600}
+
+/* RPG dialog */
+.dlg{position:absolute;left:16px;right:16px;bottom:calc(max(14px,env(safe-area-inset-bottom)) + 4px);z-index:6;min-height:132px;padding:18px 18px 24px;
+  display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;cursor:pointer;max-width:620px;margin:0 auto}
+.dlg[hidden]{display:none}
+.dlg-face{width:64px;height:56px;image-rendering:pixelated;background:#CFE6F2;box-shadow:0 0 0 3px var(--ink);margin-top:2px}
+.dlg.noface .dlg-face{display:none}
+.dlg.noface .dlg-body{grid-column:1/3}
+.dlg-name{font-family:var(--f-pixel);font-size:10px;color:var(--oxide);margin:2px 0 9px}
+.dlg-text{font-family:var(--f-talk);font-size:19px;line-height:1.4;margin:0;min-height:2.8em}
+.dlg-next{position:absolute;right:18px;bottom:12px;width:14px;height:8px;animation:blink 1s steps(1) infinite}
+.dlg-next.off{visibility:hidden}
+@keyframes blink{50%{opacity:0}}
+
+/* Sheet */
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:8;transform:translateY(105%);transition:transform .36s steps(9,end);display:flex;justify-content:center;padding:0 10px;pointer-events:none}
+.sheet.open{transform:none;pointer-events:auto}
+.sheet-card{width:100%;max-width:640px;max-height:min(86vh,820px);overflow-y:auto;overscroll-behavior:contain;padding:22px 18px 0;position:relative}
+.sheet-close{position:sticky;top:0;float:right;margin:-6px -4px 0 8px;width:40px;height:40px;border:0;background:var(--ink);color:var(--wall);font-family:var(--f-pixel);font-size:13px;z-index:2}
+.sheet h2{font-family:var(--f-pixel);font-weight:400;font-size:15px;line-height:1.4;margin:6px 0 12px;color:var(--ink)}
+.sheet-facts{font-size:17px;line-height:1.45;margin:0 0 12px;max-width:60ch}
+.sheet-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 4px}
+.sheet-price:empty{display:none}
+.sheet-price strong{font-size:28px;line-height:1.1}
+.sheet-price span{font-size:17px;color:#4a3a30}
+.sheet-note{font-size:15px;line-height:1.45;margin:6px 0 14px;color:#4a3a30;max-width:60ch}
+.photos{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px;margin:0 0 6px}
+.photos figure{margin:0;cursor:zoom-in}
+.photos figure:first-child{grid-column:1/3}
+.photos img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#E3D7B6;box-shadow:0 0 0 2px var(--ink)}
+.photos figcaption{font-size:13px;line-height:1.35;margin:6px 2px 2px;color:#4a3a30}
+.photos .soon{grid-column:1/3;font-size:15px;background:#FFE7A3;padding:8px 10px;margin:0;box-shadow:0 0 0 2px var(--ink)}
+.wa-wrap{position:sticky;bottom:0;padding:14px 0 18px;background:linear-gradient(rgba(247,235,203,0),var(--parch) 35%)}
+.btn-wa{display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:10px 14px;background:var(--wa);color:#fff;text-decoration:none;font-family:var(--f-read);font-weight:700;font-size:17px;text-align:center;
+  box-shadow:inset 0 -4px 0 var(--wa-dk),0 0 0 3px var(--ink)}
+.btn-wa:hover{background:#468a3c}
+.btn-wa svg{flex:none}
+.scrim{position:absolute;inset:0;background:rgba(43,29,26,.35);z-index:7;opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+
+/* Price card */
+.prices{position:absolute;z-index:9;left:16px;right:16px;top:50%;transform:translateY(-50%);max-width:440px;margin:0 auto;padding:22px 20px 20px;max-height:92vh;overflow-y:auto}
+.prices[hidden]{display:none}
+.prices h2{font-family:var(--f-pixel);font-weight:400;font-size:13px;margin:4px 0 14px}
+.estate{background:#FFE7A3;box-shadow:0 0 0 3px var(--ink);padding:12px 12px 10px;margin:0 3px 14px}
+.estate .lbl{font-weight:700;font-size:17px;margin:0}
+.estate .sub{font-size:15px;margin:2px 0 8px;color:#4a3a30}
+.estate .big{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 12px}
+.estate .big strong{font-size:32px;line-height:1}
+.estate .big span{font-size:18px}
+.estate .save{font-size:15px;margin:8px 0 0}
+.units{list-style:none;margin:0 0 4px;padding:0}
+.units li{margin:0}
+.units button{width:100%;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:baseline;background:none;border:0;border-bottom:2px dotted #C9A96E;padding:10px 4px;text-align:left;font-family:var(--f-read)}
+.units button:hover{background:#FFF4D6}
+.units .n{font-size:17px;font-weight:700}
+.units .z{font-size:18px;font-weight:700;text-align:right}
+.units .d{font-size:13px;color:#5d4c3f}
+.units .us{font-size:14px;text-align:right;color:#4a3a30}
+.rate{font-size:13px;color:#5d4c3f;margin:8px 4px 14px}
+.prices .x{position:absolute;right:10px;top:10px;width:40px;height:40px;border:0;background:var(--ink);color:var(--wall);font-family:var(--f-pixel);font-size:13px}
+
+/* Lightbox */
+.lb{position:absolute;inset:0;z-index:12;background:rgba(20,14,12,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:76vh;object-fit:contain;box-shadow:0 0 0 3px var(--wall)}
+.lb p{color:var(--wall);font-size:15px;max-width:60ch;text-align:center;margin:14px 0 10px}
+.lb .nav{display:flex;gap:10px}
+.lb button{border:0;min-width:56px;height:44px;background:var(--parch);font-family:var(--f-pixel);font-size:10px;padding:0 12px}
+
+/* Desktop: price list docked on the right */
+@media (min-width:980px){
+  .hud{align-items:flex-start;text-align:left;padding-left:24px;padding-top:22px}
+  .title{font-size:24px}
+  .chip{display:none}
+  .prices.dock{display:block;left:auto;right:24px;top:24px;transform:none;width:340px;max-height:calc(100vh - 48px);margin:0}
+  .prices.dock .x{display:none}
+  .bar{justify-content:flex-start;padding-left:24px;bottom:18px;right:auto}
+  .hint{left:24px;transform:none;bottom:84px}
+  .dlg{left:24px;right:auto;width:min(620px,calc(100vw - 440px));bottom:18px;margin:0}
+  .sheet{right:388px}
+  .watch{left:calc((100vw - 388px)/2)}
+}
+body.og .bar,body.og .hint,body.og #tags,body.og .prices{display:none!important}
+body.og .chip .more{display:none}
+body.og .chip{display:grid;margin-top:14px}
+body.og .place{margin-top:10px}
+@media (prefers-reduced-motion:reduce){.sheet{transition:none}.dlg-next{animation:none}}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="scene" role="img" aria-label="Pixel-art map of Casa Paradiso: three cottages stepping up the slope on the left, the splash pool in the middle, the big house on the right and a sandy path to the beach"></canvas>
+  <div id="tags"></div>
+
+  <header class="hud">
+    <h1 class="title">Casa Paradiso</h1>
+    <p class="place">Tofinho, Mozambique</p>
+    <button class="chip pixbox" id="chip" aria-label="Whole estate ZAR 4.0 million, about USD 243 thousand. See all prices.">
+      <span class="k">Whole estate</span>
+      <span class="v">ZAR 4.0M</span><span class="u">USD 243k</span>
+      <span class="more">4 houses, pool, 1,800 m². See prices</span>
+    </button>
+  </header>
+
+  <div class="watch pixbox" id="watch" hidden><canvas id="ico-watch" width="12" height="12" style="width:24px;height:24px;image-rendering:pixelated"></canvas><b id="watch-t">0:00</b><span>to the beach</span></div>
+
+  <p class="hint" id="hint">Tap a house, the pool, Tofu or Pedro</p>
+
+  <nav class="bar" aria-label="Scene controls">
+    <button class="pbtn pixbox" id="b-night" aria-pressed="false"><canvas id="ico-night" width="12" height="12"></canvas><span id="b-night-l">Night</span></button>
+    <button class="pbtn pixbox" id="b-sound" aria-pressed="false"><canvas id="ico-sound" width="12" height="12"></canvas><span id="b-sound-l">Sound</span></button>
+    <button class="pbtn pixbox" id="b-prices"><canvas id="ico-coin" width="12" height="12"></canvas>Prices</button>
+  </nav>
+
+  <div class="dlg pixbox" id="dlg" hidden role="dialog" aria-live="polite" aria-label="Message">
+    <canvas class="dlg-face" id="dlg-face" width="16" height="14"></canvas>
+    <div class="dlg-body">
+      <div class="dlg-name" id="dlg-name"></div>
+      <p class="dlg-text" id="dlg-text"></p>
+    </div>
+    <svg class="dlg-next" id="dlg-next" viewBox="0 0 7 4" shape-rendering="crispEdges" aria-hidden="true"><path fill="#8E4A3A" d="M0 0h7v1H0zM1 1h5v1H1zM2 2h3v1H2zM3 3h1v1H3z"/></svg>
+  </div>
+
+  <div class="scrim" id="scrim"></div>
+
+  <section class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-card pixbox" role="dialog" aria-labelledby="sheet-title" tabindex="-1" id="sheet-card">
+      <button class="sheet-close" id="sheet-close" aria-label="Close">X</button>
+      <h2 id="sheet-title"></h2>
+      <p class="sheet-facts" id="sheet-facts"></p>
+      <div class="sheet-price" id="sheet-price"></div>
+      <p class="sheet-note" id="sheet-note"></p>
+      <div class="photos" id="sheet-photos"></div>
+      <div class="wa-wrap"><a class="btn-wa" id="sheet-wa" target="_blank" rel="noopener"></a></div>
+    </div>
+  </section>
+
+  <aside class="prices pixbox" id="prices" hidden aria-labelledby="prices-h">
+    <button class="x" id="prices-x" aria-label="Close prices">X</button>
+    <h2 id="prices-h">Price list</h2>
+    <div class="estate">
+      <p class="lbl">Whole estate</p>
+      <p class="sub">All four houses, pool, 1,800 m²</p>
+      <div class="big"><strong>ZAR 4.0M</strong><span>USD 243k</span></div>
+      <p class="save">ZAR 4.45M separately, save ZAR 445k</p>
+    </div>
+    <ul class="units">
+      <li><button data-go="big"><span class="n">Big house</span><span class="z">ZAR 2.2M</span><span class="d">4 bed, 3 bath, sleeps 8</span><span class="us">USD 134k</span></button></li>
+      <li><button data-go="top"><span class="n">Cottage Top</span><span class="z">ZAR 800k</span><span class="d">1 bed, en-suite, about 70 m²</span><span class="us">USD 48.6k</span></button></li>
+      <li><button data-go="mid"><span class="n">Cottage Middle</span><span class="z">ZAR 750k</span><span class="d">1 bed, en-suite, about 70 m²</span><span class="us">USD 45.5k</span></button></li>
+      <li><button data-go="down"><span class="n">Cottage Down</span><span class="z">ZAR 700k</span><span class="d">1 bed, en-suite, about 70 m²</span><span class="us">USD 42.5k</span></button></li>
+    </ul>
+    <p class="rate">USD at 1 USD = 16.47 ZAR</p>
+    <a class="btn-wa" id="prices-wa" target="_blank" rel="noopener"></a>
+  </aside>
+
+  <div class="lb" id="lb" hidden role="dialog" aria-label="Photo">
+    <img id="lb-img" alt="">
+    <p id="lb-cap"></p>
+    <div class="nav"><button id="lb-prev" aria-label="Previous photo">&lt;</button><button id="lb-x">Close</button><button id="lb-next" aria-label="Next photo">&gt;</button></div>
+  </div>
+</div>
+<script type="module" src="js/game.js"></script>
+</body>
+</html>
